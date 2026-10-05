@@ -3,6 +3,8 @@
 - name: Converge
   hosts: all
   gather_facts: true  # Disable if your role does not rely on facts
+  vars_files:
+    - packages.yml
   tasks:
     - name: Include main role
       ansible.builtin.include_role:

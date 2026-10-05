@@ -1,4 +1,28 @@
 ---
+- name: Create package installation directory
+  ansible.builtin.file:
+    path: '{{ eget_install_dir }}'
+    state: directory
+    mode: '0755'
+  when: eget_packages | length > 0
+
+- name: Install packages with eget
+  ansible.builtin.command:
+    cmd: '{{ item.value }} --to {{ (eget_install_dir ~ "/" ~ item.key) | quote }}'
+    creates: '{{ eget_install_dir }}/{{ item.key }}'
+  loop: '{{ eget_packages | dict2items }}'
+  loop_control:
+    label: '{{ item.key }}'
+
+- name: Make installed packages executable
+  ansible.builtin.file:
+    path: '{{ eget_install_dir }}/{{ item.key }}'
+    state: file
+    mode: '0755'
+  loop: '{{ eget_packages | dict2items }}'
+  loop_control:
+    label: '{{ item.key }}'
+
 - name: Verify installation
   ansible.builtin.include_tasks:
     apply:

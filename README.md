@@ -4,8 +4,7 @@
 [![License][license-image]][license-link]
 [![Check][check-image]][check-link]
 
-This is a template role.
-Use it as starting point to create your own role.
+This role installs binaries from a configurable mapping of package names to eget commands.
 
 ## Getting Started
 
@@ -25,6 +24,7 @@ This role requires:
 
 - Ansible
 - Python
+- [eget](https://github.com/zyedidia/eget) installed on target hosts and available in `PATH`
 - Administrative/root access on target hosts
 - One of the following operating systems:
   - Alpine Linux
@@ -43,6 +43,22 @@ ansible-galaxy install git+https://github.com/Cogni-AI-OU/ansible-role-template.
 
 For available variables,
 check [`defaults/main.yml`](defaults/main.yml).
+
+- `eget_packages`: Mapping of installed binary names to complete eget commands (default: `{}`).
+- `eget_install_dir`: Destination directory (default: `/usr/local/bin`).
+
+For example:
+
+```yaml
+eget_packages:
+  bat: eget -a x86_64-unknown-linux-gnu -a tar.gz sharkdp/bat
+  rg: eget -a x86_64-unknown-linux-musl.tar.gz BurntSushi/ripgrep
+```
+
+The role appends `--to <eget_install_dir>/<package name>` to each command.
+Existing binaries are skipped; remove a binary to reinstall it or change its release.
+Use play-level `become: true` when the destination requires elevated privileges.
+Choose asset filters compatible with your target's operating system and architecture.
 
 ## Testing
 
@@ -84,6 +100,12 @@ To test using Molecule, run:
 ```shell
 molecule test
 ```
+
+Both scenarios install the 21 packages in [`molecule/default/packages.yml`](molecule/default/packages.yml)
+and verify that each binary exists, is executable, and can report its version.
+These fixtures require x86-64 Debian/Ubuntu (glibc); they do not target i386 Alpine or NixOS.
+The prepare step installs eget and target-side runtime dependencies.
+Tests require access to GitHub releases and `downloads.claude.ai`.
 
 ## Development
 

@@ -22,12 +22,12 @@
     },
     {
       "title": "Role Variables",
-      "description": "## Default Variables\n\nThe `defaults/main.yml` file defines default values for role variables that users can override.\n\n### Best Practices:\n\n- Keep defaults minimal and sensible\n- Document all variables with inline comments\n- Use descriptive variable names with the role name as prefix\n- Organize variables logically (by feature or component)\n- Provide examples for complex data structures\n\n### Template Note:\n\nThis template has an empty defaults file - you'll add your role-specific variables here as you develop the role.\n\n### Example Structure:\n\n```yaml\n# Package management\nmy_role_package_state: present\nmy_role_packages:\n  - package1\n  - package2\n\n# Configuration\nmy_role_config_path: /etc/myapp/config.yml\nmy_role_enable_feature: true\n```",
+      "description": "## Default Variables\n\n`eget_packages` maps installed binary names to complete eget commands. It defaults to an empty mapping, so no packages are installed unless configured.\n\n`eget_install_dir` defaults to `/usr/local/bin`. Override it for a user-writable destination.\n\nSee `molecule/default/packages.yml` for the 21-package x86-64 Linux test fixture.",
       "file": "defaults/main.yml"
     },
     {
       "title": "Role Tasks",
-      "description": "## Main Task Entry Point\n\nThe `tasks/main.yml` file is the entry point for role execution.\n\n### Current Structure:\n\nThis template includes a verification task that demonstrates:\n- Using `ansible.builtin.include_tasks` for task organization\n- Applying tags for selective execution\n- Modular task organization\n\n### Best Practices:\n\n- Break complex roles into multiple task files\n- Use meaningful task names starting with action verbs\n- Apply tags for selective execution\n- Use fully qualified collection names (FQCN) for all modules\n- Keep tasks idempotent\n- Group related tasks in separate files\n\n### Common Patterns:\n\n```yaml\n- name: Include OS-specific variables\n  ansible.builtin.include_vars: \"{{ ansible_facts['os_family'] }}.yml\"\n\n- name: Include installation tasks\n  ansible.builtin.include_tasks: install.yml\n\n- name: Include configuration tasks\n  ansible.builtin.include_tasks: configure.yml\n```",
+      "description": "## Main Task Entry Point\n\nThe role creates `eget_install_dir` and runs each configured eget command without a shell. It appends an explicit output path based on the package key, ensuring names such as `rg` and `tealdeer` are preserved.\n\nExisting binaries are skipped using Ansible's `creates` guard. Install eget on target hosts before running the role and enable play-level privilege escalation when needed.",
       "file": "tasks/main.yml",
       "line": 1
     },
@@ -76,8 +76,8 @@
       "directory": "tests"
     },
     {
-      "title": "Molecule Testing Framework",
-      "description": "## Advanced Testing with Molecule\n\nMolecule is a testing framework designed for Ansible roles, providing comprehensive testing capabilities.\n\n### Directory Structure:\n\n- **default/**: Default test scenario\n  - `molecule.yml`: Molecule configuration\n  - `converge.yml`: Main playbook to apply role\n  - `verify.yml`: Verification tests\n  - `prepare.yml`: Pre-test setup\n  - `create.yml`: Instance creation\n  - `destroy.yml`: Cleanup\n\n### Test Scenarios:\n\n- **default**: Standard testing scenario\n- **devel**: Development/experimental testing\n\n### Running Molecule Tests:\n\n```bash\n# Run full test cycle\nmolecule test\n\n# Run tests for specific scenario\nmolecule test -s devel\n\n# Individual test phases\nmolecule create      # Create test instances\nmolecule converge    # Apply the role\nmolecule verify      # Run verification tests\nmolecule destroy     # Cleanup\n\n# Useful for development\nmolecule converge    # Apply changes\nmolecule verify      # Test without destroying\n```\n\n### Advantages:\n\n- Full test lifecycle management\n- Multiple test scenarios\n- Integration with various backends (Docker, Vagrant, etc.)\n- Automated verification\n- Industry standard for role testing",
+      "title": "Molecule Package Testing",
+      "description": "## Package Testing with Molecule\n\nBoth scenarios share `default/packages.yml`, containing all 21 requested eget commands. Tests target x86-64 Debian/Ubuntu because the fixture includes glibc binaries.\n\nPrepare installs eget and target runtime dependencies. Converge installs every package; idempotence checks that a second run makes no changes. Verify checks each binary's presence, executable permission, and version command.\n\nRun `pipenv run molecule test` for the default scenario or `pipenv run molecule test -s devel` for the development scenario. Downloads require access to GitHub releases and `downloads.claude.ai`.",
       "directory": "molecule"
     },
     {
