@@ -21,11 +21,10 @@ lint: |
 # scenarios. Molecule's Docker driver names each container exactly after its
 # platform, so generic names such as `debian-latest` collide with concurrent
 # Molecule runs of other roles or scenarios.
+# Requested binaries require x86-64 Linux with glibc 2.39 or newer.
 platforms:
   - name: template-default-debian-latest
     image: debian:latest
-  - name: template-default-ubuntu-jammy
-    image: ubuntu:jammy
   - name: template-default-ubuntu-noble
     image: ubuntu:noble
   - name: template-default-ubuntu-latest

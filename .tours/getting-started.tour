@@ -77,7 +77,7 @@
     },
     {
       "title": "Molecule Package Testing",
-      "description": "## Package Testing with Molecule\n\nBoth scenarios share `default/packages.yml`, containing all 21 requested eget commands. Tests target x86-64 Debian/Ubuntu because the fixture includes glibc binaries.\n\nPrepare installs eget and target runtime dependencies. Converge installs every package; idempotence checks that a second run makes no changes. Verify checks each binary's presence, executable permission, and version command.\n\nRun `pipenv run molecule test` for the default scenario or `pipenv run molecule test -s devel` for the development scenario. Downloads require access to GitHub releases and `downloads.claude.ai`.",
+      "description": "## Package Testing with Molecule\n\nBoth scenarios share `default/packages.yml`, containing all 21 requested eget commands. Tests target x86-64 Debian latest and Ubuntu 24.04/newer because the fixture requires glibc 2.39 or newer.\n\nPrepare installs eget and target runtime dependencies. Converge installs every package; idempotence checks that a second run makes no changes. Verify checks each binary's presence, executable permission, and version command.\n\nRun `pipenv run molecule test` for the default scenario or `pipenv run molecule test -s devel` for the development scenario. Downloads require access to GitHub releases and `downloads.claude.ai`.",
       "directory": "molecule"
     },
     {
