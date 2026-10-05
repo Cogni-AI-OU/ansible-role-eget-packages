@@ -1,0 +1,42 @@
+---
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+# Platform names follow the `<role>-<scenario>-<platform>` convention so the
+# Docker containers (named after the platform) stay unique across roles and
+# scenarios. Molecule's Docker driver names each container exactly after its
+# platform, so generic names such as `debian-latest` collide with concurrent
+# Molecule runs of other roles or scenarios.
+platforms:
+  - name: template-devel-alpine-latest
+    image: i386/alpine:latest
+  - name: template-devel-debian-latest
+    image: debian:latest
+  - name: template-devel-ubuntu-jammy
+    image: ubuntu:jammy
+  - name: template-devel-ubuntu-noble
+    image: ubuntu:noble
+  - name: template-devel-ubuntu-latest
+    image: ubuntu:latest
+provisioner:
+  config_options:
+    defaults:
+      callbacks_enabled: ansible.posix.profile_tasks
+      # Use the built-in default callback with result_format instead of community.general.yaml
+      stdout_callback: ansible.builtin.default
+      result_format: yaml
+      remote_tmp: /tmp/.ansible-tmp-$${USER}
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        ansible_python_interpreter: auto_silent
+  playbooks:
+    converge: ../default/converge.yml
+    prepare: ../default/prepare.yml
+    verify: ../default/verify.yml
+verifier:
+  name: ansible

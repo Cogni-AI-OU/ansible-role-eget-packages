@@ -1,0 +1,82 @@
+---
+# Ansible playbook file.
+# Usage: ansible-playbook .devcontainer/provision.yml
+# Note: Keep keys and lists in alphabetical order.
+- name: Provision dev container
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    apt_packages:
+      - coreutils
+      - curl
+      - direnv
+      - figlet
+      - findutils
+      - gh
+      - git
+      - links
+      - mawk
+      - sed
+      - time
+      - vim
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Install apt packages
+      ansible.builtin.apt:
+        name: '{{ apt_packages }}'
+        state: present
+    - name: Install python requirements
+      ansible.builtin.pip:
+        requirements: '{{ playbook_dir }}/requirements.txt'
+        state: present
+    - name: Install ansible via pipx
+      ansible.builtin.command:
+        argv:
+          - pipx
+          - install
+          - --include-deps
+          - ansible
+      args:
+        creates: '{{ ansible_env.HOME }}/.local/bin/ansible'
+      become: false
+    - name: Inject ansible python requirements
+      ansible.builtin.command:
+        argv:
+          - pipx
+          - inject
+          - ansible
+          - -r
+          - '{{ playbook_dir }}/requirements-ansible.txt'
+      become: false
+      register: pipx_inject
+      changed_when: >-
+        'already' not in ((pipx_inject.stdout + pipx_inject.stderr) | lower)
+      failed_when: >-
+        pipx_inject.rc != 0
+        and 'already' not in ((pipx_inject.stdout + pipx_inject.stderr) | lower)
+    - name: Install ansible collections
+      ansible.builtin.command: ansible-galaxy collection install -r requirements.yml
+      args:
+        chdir: '{{ playbook_dir }}/..'
+      become: false
+      register: galaxy_result
+      changed_when: "'Nothing to do' not in galaxy_result.stdout"
+    - name: Ensure ~/.local/bin is in PATH for user-installed CLIs (pre-commit, uv, etc.)
+      ansible.builtin.lineinfile:
+        path: '{{ ansible_env.HOME }}/.bashrc'
+        line: export PATH="$HOME/.local/bin:$PATH"
+        state: present
+        insertafter: EOF
+        create: true
+        mode: '0644'
+      become: false
+      when: ansible_env.HOME is defined
+    - name: Install pre-commit hooks
+      ansible.builtin.command: pre-commit install
+      args:
+        chdir: '{{ playbook_dir }}/..'
+        creates: .git/hooks/pre-commit
+      become: false

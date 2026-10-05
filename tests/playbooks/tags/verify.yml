@@ -1,0 +1,110 @@
+---
+- name: Build NixOS test image when needed
+  hosts: localhost
+  gather_facts: false
+  tags: always
+  vars_files:
+    - ../../vars/main.yml
+  tasks:
+    - name: Render Dockerfile for NixOS image
+      ansible.builtin.template:
+        src: '{{ nixos_dockerfile_template }}'
+        dest: '{{ nixos_dockerfile_output }}'
+        mode: '0644'
+      vars:
+        item:
+          name: template-on-nixos-latest
+          image: nixos/nix:latest
+        ansible_python_interpreter: '{{ controller_python }}'
+      when: "'template-on-nixos-latest' in groups['docker_containers']"
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+    - name: Build NixOS image with Python preinstalled
+      community.docker.docker_image:
+        name: '{{ nixos_built_image }}'
+        build:
+          path: '{{ nixos_dockerfile_output | dirname }}'
+          dockerfile: '{{ nixos_dockerfile_output | basename }}'
+        source: build
+        force_source: true
+      when: "'template-on-nixos-latest' in groups['docker_containers']"
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+      vars:
+        ansible_python_interpreter: '{{ controller_python }}'
+- name: Ensure Docker containers are up-and-running
+  gather_facts: false
+  hosts: docker_containers
+  pre_tasks:
+    - name: Ensure requests is installed on controller
+      ansible.builtin.pip:
+        name: requests
+        state: present
+        executable: '{{ controller_pip }}'
+        extra_args: -q
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+      delegate_to: localhost
+      run_once: true  # noqa: run-once[task]
+    - name: Ensure container is started
+      community.docker.docker_container:
+        command: sleep infinity
+        image: '{{ container_image }}'
+        name: '{{ inventory_hostname }}'
+        # NixOS images require privileged mode due to their non-standard filesystem layout
+        # and init expectations when run under Docker, especially in CI environments.
+        privileged: "{{ container_image is search('nixos') }}"
+        pull: "{{ (container_image is not search('cogni-ai-template-nixos')) | bool }}"
+        recreate: true
+        # Relaxed seccomp/apparmor for NixOS compatibility.
+        security_opts: >-
+          {{ ['seccomp=unconfined', 'apparmor=unconfined']
+          if container_image is search('nixos') else omit }}
+        state: started
+      delegate_to: localhost
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+      vars:
+        # Use system Python with requests installed for controller-side Docker modules.
+        ansible_python_interpreter: '{{ controller_python }}'
+    - name: Wait for container to be ready
+      community.docker.docker_container_info:
+        name: '{{ inventory_hostname }}'
+      register: container_info
+      until:
+        - container_info is defined
+        - (container_info.container is defined and container_info.container.State.Running | default(false) | bool)
+      delegate_to: localhost
+      changed_when: false
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+      vars:
+        # Use system Python with requests installed for controller-side Docker modules.
+        ansible_python_interpreter: '{{ controller_python }}'
+    - name: Install Python 3 for Ansible
+      ansible.builtin.include_tasks: ../tasks/install-python.yml
+      vars:
+        install_python_changed: true
+  tags: always
+  vars:
+    container_image_map:
+      template-on-alpine-latest: alpine:latest
+      template-on-debian-latest: debian:latest
+      template-on-nixos-latest: '{{ nixos_built_image }}'
+      template-on-ubuntu-jammy: ubuntu:jammy
+      template-on-ubuntu-latest: ubuntu:latest
+      template-on-ubuntu-noble: ubuntu:noble
+    container_image: "{{ container_image_map[inventory_hostname] | default('ubuntu:latest') }}"
+  vars_files:
+    - ../../vars/main.yml
+- name: Import cogni-ai.template role (verify tag)
+  hosts: docker_containers
+  gather_facts: true
+  tasks:
+    - name: Import cogni-ai.template role
+      ansible.builtin.import_role:
+        name: cogni-ai.template
+  tags: verify
+  post_tasks:
+    - name: Stop Docker containers
+      community.docker.docker_container:
+        name: '{{ inventory_hostname }}'
+        state: stopped
+      delegate_to: localhost
+      no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+      failed_when: false

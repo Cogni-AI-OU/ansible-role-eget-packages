@@ -1,0 +1,59 @@
+---
+name: Molecule
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+    paths-ignore:
+      - '!.github/workflows/**'
+      - '**.cfg'
+      - '**.md'
+      - .*
+      - LICENSE
+      - Pipfile*
+  push:
+    paths-ignore:
+      - '!.github/workflows/**'
+      - '**.cfg'
+      - '**.md'
+      - .*
+      - LICENSE
+      - Pipfile*
+  workflow_dispatch:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - default
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: ${{ github.repository }}
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          cache: pip
+          cache-dependency-path: |
+            ${{ github.repository }}/.devcontainer/requirements.txt
+            ${{ github.repository }}/Pipfile*
+          python-version: '3.12'
+      - uses: gofrolist/molecule-action@v2
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
+          ANSIBLE_STDOUT_CALLBACK: ${{ runner.debug == '1' && 'debug' || 'community.general.unixy' }}
+          ANSIBLE_LOAD_CALLBACK_PLUGINS: '1'
+          DEBIAN_FRONTEND: noninteractive
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          molecule_args: >-
+            --scenario-name ${{ matrix.scenario }}
+          molecule_command: test
+          molecule_options: ${{ runner.debug == '1' && '--verbose' || '' }}
+          molecule_working_dir: ${{ github.repository }}
+      # Debug with tmate on failure when debug logging is enabled.
+      - if: ${{ failure() && runner.debug == '1' }}
+        uses: mxschmitt/action-tmate@v3
+    timeout-minutes: 20

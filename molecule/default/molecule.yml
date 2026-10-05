@@ -1,0 +1,90 @@
+---
+# Molecule configuration file.
+# Dependency management (download roles/collections)
+# Note: Keep YAML keys sorted alphabetically.
+dependency:
+  name: galaxy
+  options:
+    ignore-certs: false
+    ignore-errors: false
+    role-file: requirements.yml
+    requirements-file: requirements.yml
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  molecule syntax
+  ansible-lint
+# Platform names follow the `<role>-<scenario>-<platform>` convention so the
+# Docker containers (named after the platform) stay unique across roles and
+# scenarios. Molecule's Docker driver names each container exactly after its
+# platform, so generic names such as `debian-latest` collide with concurrent
+# Molecule runs of other roles or scenarios.
+platforms:
+  - name: template-default-alpine-latest
+    image: i386/alpine:latest
+  - name: template-default-debian-latest
+    image: debian:latest
+  - name: template-default-nixos-latest
+    dockerfile: ../resources/playbooks/Dockerfile.j2
+    image: cogni-ai-template-nixos:latest
+    base_image: nixos/nix:latest
+    pre_build_image: false
+  - name: template-default-ubuntu-jammy
+    image: ubuntu:jammy
+  - name: template-default-ubuntu-noble
+    image: ubuntu:noble
+  - name: template-default-ubuntu-latest
+    image: ubuntu:latest
+provisioner:
+  config_options:
+    defaults:
+      callbacks_enabled: ansible.posix.profile_tasks
+      host_key_checking: false
+      # Use the condensed unixy callback.
+      remote_tmp: /tmp/.ansible-tmp-$${USER}
+      stdout_callback: community.general.unixy
+      verbosity: 0
+  env:
+    ANSIBLE_FORCE_COLOR: '1'
+    ANSIBLE_LOAD_CALLBACK_PLUGINS: '1'
+    DEBIAN_FRONTEND: noninteractive
+  inventory:
+    group_vars:
+      all:
+        ansible_python_interpreter: auto_silent
+    host_vars:
+      template-default-nixos-latest:
+        ansible_python_interpreter: /root/.nix-profile/bin/python3
+  ssh_connection:
+    pipelining: true
+  name: ansible
+  options:
+    diff: true
+    force-handlers: true
+  playbooks:
+    cleanup: cleanup.yml
+    converge: converge.yml
+    create: create.yml
+    destroy: destroy.yml
+    prepare: prepare.yml
+    side_effect: side_effect.yml
+    verify: verify.yml
+scenario:
+  name: default
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
+verifier:
+  name: ansible

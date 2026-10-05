@@ -1,0 +1,10 @@
+---
+# A file containing a list of collections to be installed.
+# Usage:
+# ansible-galaxy install -r requirements.yml
+# Note: Keep dependencies sorted alphabetically.
+collections:
+  - name: community.docker
+    version: '>=3.10.2'
+  - name: community.general  # Required for apk, from_ini and supervisorctl modules.
+    version: '>=8.6.0'

@@ -1,0 +1,16 @@
+---
+- name: Install Python 3 on Alpine
+  ansible.builtin.raw: |
+    test -e "{{ ansible_python_interpreter }}" || (apk update -q && apk add -q --no-cache python3 py3-pip)
+  changed_when: install_python_changed | default(false)
+  when: container_image is search("alpine")
+  no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+- name: Install Python 3 on Ubuntu/Debian
+  ansible.builtin.raw: |
+    test -e "{{ ansible_python_interpreter }}" || \
+    (export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -qq && \
+    apt-get install -y -qq -o Dpkg::Use-Pty=0 python3 python3-pip)
+  changed_when: install_python_changed | default(false)
+  no_log: '{{ ansible_verbosity | default(0) < 1 }}'
+  when: container_image is search("ubuntu") or container_image is search("debian")

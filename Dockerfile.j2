@@ -1,0 +1,67 @@
+{% set role_name = role_name | default('cogni-ai.template') %}
+# Dockerfile for {{ role_name }} Ansible role
+FROM {{ docker_image | default('ubuntu:noble') }}
+
+LABEL org.opencontainers.image.source=https://github.com/Cogni-AI-OU/ansible-role-template
+LABEL org.opencontainers.image.description="Container based on the {{ role_name }} Ansible role"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install Ansible and dependencies
+{% if 'alpine' in (docker_image | default('ubuntu:noble')) %}
+RUN grep -E '^[^#].*/main$' /etc/apk/repositories | sed 's/main$/community/' >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache ansible bash ca-certificates curl git python3 sudo && \
+    update-ca-certificates
+{% elif 'nixos' in (docker_image | default('ubuntu:noble')) %}
+# Note: Do not install 'nixpkgs.git' here: it collides with the 'git-minimal'
+# pulled in by 'nixpkgs.ansible', which fails the profile build with a file
+# conflict on 'libexec/git-core/git-init'.
+RUN nix-channel --update && \
+    nix-env -iA nixpkgs.ansible nixpkgs.curl nixpkgs.procps nixpkgs.python3 nixpkgs.python3Packages.pip nixpkgs.sudo
+{% else %}
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ansible \
+    ca-certificates \
+    git \
+    lsb-release \
+    procps \
+    python3-apt \
+    python3-pip \
+    python3-setuptools \
+    python3-wheel \
+    sudo \
+    wget && \
+    pip3 install --no-cache-dir "ansible-core>=2.14" --break-system-packages || \
+    pip3 install --no-cache-dir "ansible-core>=2.14" && \
+    rm -rf /var/lib/apt/lists/*
+{% endif %}
+
+# Copy the role into the container
+WORKDIR /etc/ansible/roles/{{ role_name }}
+COPY defaults/ defaults/
+COPY handlers/ handlers/
+COPY meta/ meta/
+COPY tasks/ tasks/
+COPY vars/ vars/
+COPY ansible.cfg .
+COPY requirements.yml .
+
+# Create a local playbook to apply the role
+RUN ansible-galaxy role install -r requirements.yml --force && \
+    ansible-galaxy collection install -r requirements.yml --upgrade && \
+    printf -- "---\n- hosts: localhost\n  connection: local\n  roles:\n    - role: /etc/ansible/roles/{{ role_name }}\n" > /tmp/playbook.yml && \
+    ANSIBLE_PYTHON_INTERPRETER=auto_silent ansible-playbook /tmp/playbook.yml && \
+    rm /tmp/playbook.yml && \
+    if [ -f /usr/bin/apt-get ]; then \
+        export SUDO_FORCE_REMOVE=yes && \
+        apt-get update && \
+        apt-get purge -y --auto-remove \
+            git \
+            python3-pip \
+            python3-setuptools \
+            python3-wheel && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+    fi
