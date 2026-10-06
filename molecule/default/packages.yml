@@ -19,6 +19,7 @@ eget_packages:
   - nono
   - opencode
   - pandoc
+  - proton-drive
   - rg
   - rga
   - tealdeer

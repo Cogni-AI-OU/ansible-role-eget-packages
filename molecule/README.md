@@ -19,7 +19,7 @@ The test sequence also checks that a second convergence makes no changes.
 These fixtures require x86-64 Linux with glibc 2.39 or newer (Debian latest or Ubuntu 24.04/newer).
 They do not target i386 Alpine, Ubuntu 22.04, or NixOS.
 The prepare step installs eget and target-side runtime dependencies.
-Tests require Docker and access to GitHub releases and `downloads.claude.ai`.
+Tests require Docker and access to GitHub releases, `downloads.claude.ai`, and `proton.me`.
 
 Set `EGET_GITHUB_TOKEN` (or `GITHUB_TOKEN`) in the controller environment to authenticate GitHub release requests
 and avoid the unauthenticated API rate limit. Convergence forwards it to eget in the test containers;
