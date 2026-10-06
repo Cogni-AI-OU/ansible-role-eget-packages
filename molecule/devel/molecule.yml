@@ -12,11 +12,11 @@ lint: |
 # Molecule runs of other roles or scenarios.
 # Requested binaries require x86-64 Linux with glibc 2.39 or newer.
 platforms:
-  - name: template-devel-debian-latest
+  - name: eget-packages-devel-debian-latest
     image: debian:latest
-  - name: template-devel-ubuntu-noble
+  - name: eget-packages-devel-ubuntu-noble
     image: ubuntu:noble
-  - name: template-devel-ubuntu-latest
+  - name: eget-packages-devel-ubuntu-latest
     image: ubuntu:latest
 provisioner:
   config_options:

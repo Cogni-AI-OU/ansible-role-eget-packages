@@ -25,6 +25,6 @@
 - name: Verify installation
   ansible.builtin.include_tasks:
     apply:
-      tags: template-verify
+      tags: eget-packages-verify
     file: verify.yml
-  tags: template-verify
+  tags: eget-packages-verify

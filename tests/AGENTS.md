@@ -61,12 +61,12 @@ environment deterministically. Installing `ansible`/`ansible-lint` ad hoc instea
 - Docker daemon reachable and a working default bridge (see the troubleshooting entry below).
 - Ansible collections installed: `ansible-galaxy collection install -r requirements.yml`
   (`community.docker >= 3.10.2`, `community.general >= 8.6.0`).
-- The role resolvable as `cogni-ai.template`. The playbooks use `ansible.builtin.import_role`, which
+- The role resolvable as `cogni-ai.eget-packages`. The playbooks use `ansible.builtin.import_role`, which
   resolves from `~/.ansible/roles/` - not from the working tree. Either install it
   (`ansible-galaxy install -r requirements-local.yml`) or symlink it for development:
 
     ```bash
-    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.template
+    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.eget-packages
     ```
 
 ## What the Playbooks Do
@@ -74,11 +74,11 @@ environment deterministically. Installing `ansible`/`ansible-lint` ad hoc instea
 `docker-containers.yml` runs two plays:
 
 1. **Configure Docker container** - renders `molecule/resources/playbooks/Dockerfile.j2` to
-   `Dockerfile.template-on-nixos` and builds `cogni-ai-template-nixos:latest` (only when
-   `template-on-nixos-latest` is in the inventory), then starts each container with
+   `Dockerfile.eget-packages-on-nixos` and builds `cogni-ai-eget-packages-nixos:latest` (only when
+   `eget-packages-on-nixos-latest` is in the inventory), then starts each container with
    `recreate: true`, waits for it to be running, bootstraps Python 3, and gathers facts. NixOS
    containers get `privileged: true` and relaxed seccomp/apparmor.
-2. **Install cogni-ai.template role** - applies the role to every container, then stops the containers.
+2. **Install cogni-ai.eget-packages role** - applies the role to every container, then stops the containers.
 
 `tags/verify.yml` is the same shape, but splits the NixOS build into its own play and imports the role
 under the `verify` tag.
@@ -96,9 +96,9 @@ run is not a valid idempotency check. Run the role twice against a container tha
 converged instead - the second run must report `changed=0`:
 
 ```bash
-docker run -d --name template-on-package-image ubuntu:latest sleep infinity
+docker run -d --name eget-packages-on-package-image ubuntu:latest sleep infinity
 pipenv run ansible-playbook -i tests/inventory/docker-containers.yml \
-  --limit template-on-package-image tests/playbooks/docker-containers.yml
+  --limit eget-packages-on-package-image tests/playbooks/docker-containers.yml
 ```
 
 ## Troubleshooting Matrix
@@ -132,14 +132,14 @@ pipenv run ansible-playbook -i tests/inventory/docker-containers.yml \
 
 ### Running the tests dirties the working tree
 
-> `git status` reports `M molecule/resources/playbooks/Dockerfile.template-on-nixos` after a run.
+> `git status` reports `M molecule/resources/playbooks/Dockerfile.eget-packages-on-nixos` after a run.
 
 - **Root cause**: `docker-containers.yml` renders that file from
   `molecule/resources/playbooks/Dockerfile.j2` on every run. The committed copy is stale relative to
   the template, so the render always produces a diff.
 - **Impact**: cosmetic for the test result, but it makes the tree dirty and can mask real changes.
 - **Fix**: regenerate and commit the file, or stop tracking it. Until then, revert with
-  `git checkout -- molecule/resources/playbooks/Dockerfile.template-on-nixos`.
+  `git checkout -- molecule/resources/playbooks/Dockerfile.eget-packages-on-nixos`.
 
 ### `community.general does not support Ansible version 2.17.9`
 

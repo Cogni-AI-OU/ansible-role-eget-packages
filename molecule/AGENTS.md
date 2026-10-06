@@ -14,7 +14,7 @@ pipenv run molecule syntax
 ## Molecule Platforms
 
 Molecule platform names follow the `<role>-<scenario>-<platform>` convention, e.g.
-`template-default-debian-latest`. Molecule's Docker driver names each container
+`eget-packages-default-debian-latest`. Molecule's Docker driver names each container
 exactly after its platform, so generic names such as `debian-latest` would collide
 with concurrent Molecule runs of other roles or scenarios.
 
