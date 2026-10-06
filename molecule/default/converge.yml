@@ -5,6 +5,8 @@
   gather_facts: true  # Disable if your role does not rely on facts
   vars_files:
     - packages.yml
+  environment:
+    EGET_GITHUB_TOKEN: "{{ lookup('env', 'EGET_GITHUB_TOKEN') | default(lookup('env', 'GITHUB_TOKEN'), true) }}"
   tasks:
     - name: Include main role
       ansible.builtin.include_role:

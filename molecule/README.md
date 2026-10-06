@@ -21,4 +21,8 @@ They do not target i386 Alpine, Ubuntu 22.04, or NixOS.
 The prepare step installs eget and target-side runtime dependencies.
 Tests require Docker and access to GitHub releases and `downloads.claude.ai`.
 
+Set `EGET_GITHUB_TOKEN` (or `GITHUB_TOKEN`) in the controller environment to authenticate GitHub release requests
+and avoid the unauthenticated API rate limit. Convergence forwards it to eget in the test containers;
+the GitHub Actions workflow already supplies `GITHUB_TOKEN`.
+
 See [`AGENTS.md`](AGENTS.md) for sandbox networking options and troubleshooting.

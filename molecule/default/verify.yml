@@ -10,7 +10,6 @@
         path: '{{ eget_install_dir }}/{{ item }}'
       loop: '{{ eget_packages }}'
       register: eget_installed_packages
-
     - name: Assert every package is installed and executable
       ansible.builtin.assert:
         that:
@@ -21,7 +20,6 @@
       loop: '{{ eget_installed_packages.results }}'
       loop_control:
         label: '{{ item.item }}'
-
     - name: Run installed package version commands
       ansible.builtin.command:
         argv:

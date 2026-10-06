@@ -166,8 +166,8 @@ Tours should be updated when:
 - [CodeTour Documentation](https://github.com/microsoft/codetour)
 - [CodeTour VS Code Extension](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.codetour)
 - [VS Code Devcontainers](https://code.visualstudio.com/docs/devcontainers/containers)
-- [Ansible Role Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html)
-- [Ansible Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
+- [Ansible Role Documentation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html)
+- [Ansible Tips and Tricks](https://docs.ansible.com/projects/ansible/latest/tips_tricks/ansible_tips_tricks.html)
 
 ## Questions or Issues?
 
