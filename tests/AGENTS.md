@@ -61,12 +61,12 @@ environment deterministically. Installing `ansible`/`ansible-lint` ad hoc instea
 - Docker daemon reachable and a working default bridge (see the troubleshooting entry below).
 - Ansible collections installed: `ansible-galaxy collection install -r requirements.yml`
   (`community.docker >= 3.10.2`, `community.general >= 8.6.0`).
-- The role resolvable as `cogni-ai.eget-packages`. The playbooks use `ansible.builtin.import_role`, which
+- The role resolvable as `cogni-ai.eget_packages`. The playbooks use `ansible.builtin.import_role`, which
   resolves from `~/.ansible/roles/` - not from the working tree. Either install it
   (`ansible-galaxy install -r requirements-local.yml`) or symlink it for development:
 
     ```bash
-    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.eget-packages
+    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.eget_packages
     ```
 
 ## What the Playbooks Do
@@ -78,7 +78,7 @@ environment deterministically. Installing `ansible`/`ansible-lint` ad hoc instea
    `eget-packages-on-nixos-latest` is in the inventory), then starts each container with
    `recreate: true`, waits for it to be running, bootstraps Python 3, and gathers facts. NixOS
    containers get `privileged: true` and relaxed seccomp/apparmor.
-2. **Install cogni-ai.eget-packages role** - applies the role to every container, then stops the containers.
+2. **Install cogni-ai.eget_packages role** - applies the role to every container, then stops the containers.
 
 `tags/verify.yml` is the same shape, but splits the NixOS build into its own play and imports the role
 under the `verify` tag.

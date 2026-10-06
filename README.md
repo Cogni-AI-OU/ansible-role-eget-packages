@@ -79,7 +79,7 @@ Steps to test role on Docker containers.
     Alternatively, for development purposes, you can consider using symbolic link, e.g.
 
     ```shell
-    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.eget-packages
+    ln -vs "$PWD" ~/.ansible/roles/cogni-ai.eget_packages
     ```
 
 2. Ensure Docker service (e.g. Docker Desktop) is running.

@@ -106,16 +106,16 @@
       eget-packages-on-ubuntu-latest: ubuntu:latest
       eget-packages-on-ubuntu-noble: ubuntu:noble
     container_image: "{{ container_image_map[inventory_hostname] | default('ubuntu:latest') }}"
-- name: Install cogni-ai.eget-packages role on all containers
+- name: Install cogni-ai.eget_packages role on all containers
   hosts: docker_containers
   gather_facts: true
   tags: always
   vars:
     controller_python: '{{ ansible_playbook_python }}'
   tasks:
-    - name: Installs cogni-ai.eget-packages role
+    - name: Installs cogni-ai.eget_packages role
       ansible.builtin.import_role:
-        name: cogni-ai.eget-packages
+        name: cogni-ai.eget_packages
   post_tasks:
     - name: Stop Docker containers
       community.docker.docker_container:

@@ -34,4 +34,4 @@ galaxy_info:
         - bionic
         - focal
         - xenial
-  role_name: eget-packages
+  role_name: eget_packages
