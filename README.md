@@ -47,6 +47,8 @@ check [`defaults/main.yml`](defaults/main.yml).
 - `eget_packages`: List of package names to install (default: `[]`).
 - `eget_install_dir`: Default destination directory (default: `~/.local/bin`).
 - `eget_package_install_dirs`: Per-package destination directory overrides (default: `{}`).
+- `eget_package_versions`: Per-package version overrides for packages pinned by the role
+  (default: `astro: '1.46.0'`, `claude: '2.1.266'`, `minizinc: '2.9.7'`, `namecom: '0.5.1'`).
 
 For example:
 
@@ -56,10 +58,13 @@ eget_packages:
   - rg
 eget_package_install_dirs:
   rg: ~/.local/sbin
+eget_package_versions:
+  astro: '1.47.0'
 ```
 
 The command map in [`vars/main.yml`](vars/main.yml) defines how to install each supported package.
 Unknown package names are rejected before installation.
+Packages without a version variable install the latest available release.
 The role appends `--to <install dir>/<package name>` to each predefined command, where `<install dir>` is
 `eget_package_install_dirs[<package name>]` when set, otherwise `eget_install_dir`.
 Existing binaries are skipped; remove a binary to reinstall it or change its release.

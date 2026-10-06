@@ -1,4 +1,11 @@
 ---
+# Package versions pinned by default; override to install a different release.
+# Note: Keep YAML keys sorted alphabetically.
 eget_install_dir: ~/.local/bin
 eget_package_install_dirs: {}
+eget_package_versions:
+  astro: '1.46.0'
+  claude: '2.1.266'
+  minizinc: '2.9.7'
+  namecom: '0.5.1'
 eget_packages: []
