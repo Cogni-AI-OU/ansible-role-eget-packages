@@ -1,0 +1,7 @@
+cache_exclude_status = "400..=599"
+max_retries = 5
+retry_wait_time = 5
+
+[hosts."docs.ansible.com"]
+concurrency = 1
+request_interval = "5s"

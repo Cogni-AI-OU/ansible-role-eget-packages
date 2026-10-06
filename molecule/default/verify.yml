@@ -3,4 +3,27 @@
   hosts: all
   vars_files:
     - ../../defaults/main.yml
+    - packages.yml
   tasks:
+    - name: Inspect installed packages
+      ansible.builtin.stat:
+        path: '{{ eget_install_dir }}/{{ item }}'
+      loop: '{{ eget_packages }}'
+      register: eget_installed_packages
+    - name: Assert every package is installed and executable
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.isreg
+          - item.stat.executable
+        fail_msg: 'Package {{ item.item }} is missing or not executable'
+      loop: '{{ eget_installed_packages.results }}'
+      loop_control:
+        label: '{{ item.item }}'
+    - name: Run installed package version commands
+      ansible.builtin.command:
+        argv:
+          - '{{ eget_install_dir }}/{{ item }}'
+          - "{{ 'version' if item == 'astro' else '--version' }}"
+      changed_when: false
+      loop: '{{ eget_packages }}'

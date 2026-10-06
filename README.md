@@ -4,8 +4,7 @@
 [![License][license-image]][license-link]
 [![Check][check-image]][check-link]
 
-This is a template role.
-Use it as starting point to create your own role.
+This role installs binaries from a configurable list of package names using predefined eget commands.
 
 ## Getting Started
 
@@ -25,6 +24,7 @@ This role requires:
 
 - Ansible
 - Python
+- [eget](https://github.com/zyedidia/eget) installed on target hosts and available in `PATH`
 - Administrative/root access on target hosts
 - One of the following operating systems:
   - Alpine Linux
@@ -43,6 +43,24 @@ ansible-galaxy install git+https://github.com/Cogni-AI-OU/ansible-role-template.
 
 For available variables,
 check [`defaults/main.yml`](defaults/main.yml).
+
+- `eget_packages`: List of package names to install (default: `[]`).
+- `eget_install_dir`: Destination directory (default: `/usr/local/bin`).
+
+For example:
+
+```yaml
+eget_packages:
+  - bat
+  - rg
+```
+
+The command map in [`vars/main.yml`](vars/main.yml) defines how to install each supported package.
+Unknown package names are rejected before installation.
+The role appends `--to <eget_install_dir>/<package name>` to each predefined command.
+Existing binaries are skipped; remove a binary to reinstall it or change its release.
+Use play-level `become: true` when the destination requires elevated privileges.
+The predefined commands target x86-64 Linux; select packages compatible with your target's runtime.
 
 ## Testing
 
@@ -79,11 +97,7 @@ Steps to test role on Docker containers.
 
 ### Molecule
 
-To test using Molecule, run:
-
-```shell
-molecule test
-```
+See the [Molecule testing guide](molecule/README.md) for scenarios, requirements, and run commands.
 
 ## Development
 

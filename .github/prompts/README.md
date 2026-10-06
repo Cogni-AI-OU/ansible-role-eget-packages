@@ -62,7 +62,7 @@ model configuration.
 
 #### With GitHub Models
 
-1. **In GitHub Models Playground**: Navigate to [GitHub Models](https://github.com/marketplace/models)
+1. **In GitHub Models Playground**: Navigate to [GitHub Models](https://docs.github.com/en/github-models)
 2. **Load prompt**: Import or reference the YAML prompt file
 3. **Run**: Execute the prompt with your chosen model
 4. **Integrate**: Use the prompt in automated workflows via GitHub Models API

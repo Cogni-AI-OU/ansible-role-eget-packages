@@ -1,0 +1,24 @@
+---
+eget_packages:
+  - astro
+  - backlog
+  - bat
+  - btop
+  - bun
+  - claude
+  - duf
+  - eza
+  - fd
+  - glow
+  - jq
+  - micromamba
+  - minizinc
+  - nono
+  - opencode
+  - pandoc
+  - rg
+  - rga
+  - tealdeer
+  - vale
+  - vopono
+  - yq

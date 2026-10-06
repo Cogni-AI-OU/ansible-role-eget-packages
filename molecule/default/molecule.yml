@@ -21,18 +21,10 @@ lint: |
 # scenarios. Molecule's Docker driver names each container exactly after its
 # platform, so generic names such as `debian-latest` collide with concurrent
 # Molecule runs of other roles or scenarios.
+# Requested binaries require x86-64 Linux with glibc 2.39 or newer.
 platforms:
-  - name: template-default-alpine-latest
-    image: i386/alpine:latest
   - name: template-default-debian-latest
     image: debian:latest
-  - name: template-default-nixos-latest
-    dockerfile: ../resources/playbooks/Dockerfile.j2
-    image: cogni-ai-template-nixos:latest
-    base_image: nixos/nix:latest
-    pre_build_image: false
-  - name: template-default-ubuntu-jammy
-    image: ubuntu:jammy
   - name: template-default-ubuntu-noble
     image: ubuntu:noble
   - name: template-default-ubuntu-latest
@@ -54,9 +46,6 @@ provisioner:
     group_vars:
       all:
         ansible_python_interpreter: auto_silent
-    host_vars:
-      template-default-nixos-latest:
-        ansible_python_interpreter: /root/.nix-profile/bin/python3
   ssh_connection:
     pipelining: true
   name: ansible
