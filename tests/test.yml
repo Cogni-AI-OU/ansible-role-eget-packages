@@ -1,6 +1,6 @@
 ---
-- name: Run template role
+- name: Run eget-packages role
   hosts: localhost
   remote_user: root
   roles:
-    - cogni-ai.template
+    - cogni-ai.eget-packages

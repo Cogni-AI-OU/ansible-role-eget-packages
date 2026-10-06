@@ -1,8 +1,6 @@
 ---
 # Vars file for ansible role.
 # Note: Keep YAML keys sorted alphabetically.
-# 'template_become_method' is expected to be a dictionary keyed by OS family (e.g., 'Debian', 'RedHat'),
-# where each key maps to the appropriate become method (e.g., 'sudo', 'su') for that OS family.
 eget_package_commands:
   astro: eget -a linux_amd64 -a tar.gz --file astro --tag v1.46.0 astronomer/astro-cli
   backlog: eget -a linux -a x64 MrLesk/Backlog.md
@@ -26,12 +24,3 @@ eget_package_commands:
   vale: eget -a Linux_64-bit.tar.gz errata-ai/vale
   vopono: eget -a linux_x86-64_gcc -a ^gui --to vopono jamesmcm/vopono
   yq: eget -a ^.tar.gz mikefarah/yq
-template_become_method:
-  _default: ansible.builtin.sudo
-  Alpine: ansible.builtin.su
-  Darwin: ansible.builtin.sudo
-  Debian: ansible.builtin.su
-  NixOS: ansible.builtin.su
-  OtherLinux: ansible.builtin.su
-  Ubuntu: ansible.builtin.su
-  Windows: ansible.builtin.runas

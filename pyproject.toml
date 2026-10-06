@@ -1,13 +1,13 @@
-# Example pyproject template; update name, description, author info, and metadata for your project.
+# Project metadata for the ansible-role-eget-packages role.
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ansible-ops-template"
+name = "ansible-role-eget-packages"
 version = "0.1.0"
-description = "Template for Example ops utilities that interact with external APIs."
+description = "Ansible role that installs binaries from a configurable list of package names using predefined eget commands."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
@@ -22,5 +22,5 @@ authors = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Cogni-AI-OU/ansible-ops-template"
-Repository = "https://github.com/Cogni-AI-OU/ansible-ops-template"
+Homepage = "https://github.com/Cogni-AI-OU/ansible-role-eget-packages"
+Repository = "https://github.com/Cogni-AI-OU/ansible-role-eget-packages"
