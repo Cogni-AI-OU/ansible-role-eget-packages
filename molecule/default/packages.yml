@@ -20,6 +20,7 @@ eget_packages:
   - opencode
   - pandoc
   - proton-drive
+  - rclone
   - rg
   - rga
   - tealdeer
