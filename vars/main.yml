@@ -3,6 +3,28 @@
 # Note: Keep YAML keys sorted alphabetically.
 # 'template_become_method' is expected to be a dictionary keyed by OS family (e.g., 'Debian', 'RedHat'),
 # where each key maps to the appropriate become method (e.g., 'sudo', 'su') for that OS family.
+eget_package_commands:
+  astro: eget -a linux_amd64 -a tar.gz --file astro --tag v1.46.0 astronomer/astro-cli
+  backlog: eget -a linux -a x64 MrLesk/Backlog.md
+  bat: eget -a x86_64-unknown-linux-gnu -a tar.gz sharkdp/bat
+  btop: eget -a btop-x86_64-unknown-linux-musl.tar.gz aristocratos/btop
+  bun: eget -a bun-linux-x64.zip -a ^profile -a ^baseline --file bun oven-sh/bun
+  claude: eget https://downloads.claude.ai/claude-code-releases/2.1.266/linux-x64/claude
+  duf: eget -a linux_x86_64.tar.gz muesli/duf
+  eza: eget -a x86_64-unknown-linux-gnu -a ^no_libgit -a tar.gz eza-community/eza
+  fd: eget -a x86_64-unknown-linux-gnu -a tar.gz sharkdp/fd
+  glow: eget -a Linux_x86_64.tar.gz -a ^sbom charmbracelet/glow
+  jq: eget -a linux64 jqlang/jq
+  micromamba: eget -a linux-64 -a ^sha256 -a ^tar.bz2 --to micromamba mamba-org/micromamba-releases
+  nono: eget -a x86_64-unknown-linux-gnu.tar.gz nolabs-ai/nono
+  opencode: eget -a opencode-linux-x64.tar.gz anomalyco/opencode
+  pandoc: eget -a linux-amd64.tar.gz jgm/pandoc
+  rg: eget -a x86_64-unknown-linux-musl.tar.gz BurntSushi/ripgrep
+  rga: eget -a ripgrep_all -a x86_64-unknown-linux-musl -a tar.gz --file rga phiresky/ripgrep-all
+  tealdeer: eget -a tealdeer-linux-x86_64-musl -a ^sha256 dbrgn/tealdeer
+  vale: eget -a Linux_64-bit.tar.gz errata-ai/vale
+  vopono: eget -a linux_x86-64_gcc -a ^gui --to vopono jamesmcm/vopono
+  yq: eget -a ^.tar.gz mikefarah/yq
 template_become_method:
   _default: ansible.builtin.sudo
   Alpine: ansible.builtin.su

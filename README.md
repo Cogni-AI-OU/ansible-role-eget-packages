@@ -4,7 +4,7 @@
 [![License][license-image]][license-link]
 [![Check][check-image]][check-link]
 
-This role installs binaries from a configurable mapping of package names to eget commands.
+This role installs binaries from a configurable list of package names using predefined eget commands.
 
 ## Getting Started
 
@@ -44,21 +44,23 @@ ansible-galaxy install git+https://github.com/Cogni-AI-OU/ansible-role-template.
 For available variables,
 check [`defaults/main.yml`](defaults/main.yml).
 
-- `eget_packages`: Mapping of installed binary names to complete eget commands (default: `{}`).
+- `eget_packages`: List of package names to install (default: `[]`).
 - `eget_install_dir`: Destination directory (default: `/usr/local/bin`).
 
 For example:
 
 ```yaml
 eget_packages:
-  bat: eget -a x86_64-unknown-linux-gnu -a tar.gz sharkdp/bat
-  rg: eget -a x86_64-unknown-linux-musl.tar.gz BurntSushi/ripgrep
+  - bat
+  - rg
 ```
 
-The role appends `--to <eget_install_dir>/<package name>` to each command.
+The command map in [`vars/main.yml`](vars/main.yml) defines how to install each supported package.
+Unknown package names are rejected before installation.
+The role appends `--to <eget_install_dir>/<package name>` to each predefined command.
 Existing binaries are skipped; remove a binary to reinstall it or change its release.
 Use play-level `become: true` when the destination requires elevated privileges.
-Choose asset filters compatible with your target's operating system and architecture.
+The predefined commands target x86-64 Linux; select packages compatible with your target's runtime.
 
 ## Testing
 

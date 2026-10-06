@@ -1,4 +1,11 @@
 ---
+- name: Validate requested packages
+  ansible.builtin.assert:
+    that:
+      - item in eget_package_commands
+    fail_msg: 'Unknown eget package: {{ item }}'
+  loop: '{{ eget_packages }}'
+
 - name: Create package installation directory
   ansible.builtin.file:
     path: '{{ eget_install_dir }}'
@@ -8,20 +15,16 @@
 
 - name: Install packages with eget
   ansible.builtin.command:
-    cmd: '{{ item.value }} --to {{ (eget_install_dir ~ "/" ~ item.key) | quote }}'
-    creates: '{{ eget_install_dir }}/{{ item.key }}'
-  loop: '{{ eget_packages | dict2items }}'
-  loop_control:
-    label: '{{ item.key }}'
+    cmd: '{{ eget_package_commands[item] }} --to {{ (eget_install_dir ~ "/" ~ item) | quote }}'
+    creates: '{{ eget_install_dir }}/{{ item }}'
+  loop: '{{ eget_packages }}'
 
 - name: Make installed packages executable
   ansible.builtin.file:
-    path: '{{ eget_install_dir }}/{{ item.key }}'
+    path: '{{ eget_install_dir }}/{{ item }}'
     state: file
     mode: '0755'
-  loop: '{{ eget_packages | dict2items }}'
-  loop_control:
-    label: '{{ item.key }}'
+  loop: '{{ eget_packages }}'
 
 - name: Verify installation
   ansible.builtin.include_tasks:
