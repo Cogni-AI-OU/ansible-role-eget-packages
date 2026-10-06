@@ -7,7 +7,7 @@
   tasks:
     - name: Inspect installed packages
       ansible.builtin.stat:
-        path: '{{ eget_install_dir }}/{{ item }}'
+        path: '{{ eget_package_install_dirs[item] | default(eget_install_dir) }}/{{ item }}'
       loop: '{{ eget_packages }}'
       register: eget_installed_packages
     - name: Assert every package is installed and executable
@@ -23,7 +23,7 @@
     - name: Run installed package version commands
       ansible.builtin.command:
         argv:
-          - '{{ eget_install_dir }}/{{ item }}'
+          - '{{ eget_package_install_dirs[item] | default(eget_install_dir) }}/{{ item }}'
           - "{{ 'version' if item == 'astro' else '--version' }}"
       changed_when: false
       loop: '{{ eget_packages }}'

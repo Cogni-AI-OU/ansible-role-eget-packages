@@ -1,4 +1,6 @@
 ---
+eget_package_install_dirs:
+  jq: /opt/eget/bin
 eget_packages:
   - astro
   - backlog

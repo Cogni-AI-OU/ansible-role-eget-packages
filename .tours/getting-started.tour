@@ -22,12 +22,12 @@
     },
     {
       "title": "Role Variables",
-      "description": "## Default Variables\n\n`eget_packages` is a plain list of package names. It defaults to an empty list, so no packages are installed unless configured. The command map in `vars/main.yml` defines how to install each supported package.\n\n`eget_install_dir` defaults to `/usr/local/bin`. Override it for a user-writable destination.\n\nSee `molecule/default/packages.yml` for the x86-64 Linux test fixture.",
+      "description": "## Default Variables\n\n`eget_packages` is a plain list of package names. It defaults to an empty list, so no packages are installed unless configured. The command map in `vars/main.yml` defines how to install each supported package.\n\n`eget_install_dir` defaults to `~/.local/bin` and sets the destination for every package. Override it, or set `eget_package_install_dirs` to customize the destination per package.\n\nSee `molecule/default/packages.yml` for the x86-64 Linux test fixture.",
       "file": "defaults/main.yml"
     },
     {
       "title": "Role Tasks",
-      "description": "## Main Task Entry Point\n\nThe role validates requested package names, creates `eget_install_dir`, and runs each package's predefined eget command without a shell. It appends an explicit output path based on the package name, ensuring names such as `rg` and `tealdeer` are preserved.\n\nExisting binaries are skipped using Ansible's `creates` guard. Install eget on target hosts before running the role and enable play-level privilege escalation when needed.",
+      "description": "## Main Task Entry Point\n\nThe role validates requested package names, creates each package's destination directory, and runs each package's predefined eget command without a shell. It appends an explicit output path based on the package name, ensuring names such as `rg` and `tealdeer` are preserved.\n\nExisting binaries are skipped using Ansible's `creates` guard. Install eget on target hosts before running the role and enable play-level privilege escalation when needed.",
       "file": "tasks/main.yml",
       "line": 1
     },

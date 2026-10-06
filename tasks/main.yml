@@ -5,23 +5,30 @@
       - item in eget_package_commands
     fail_msg: 'Unknown eget package: {{ item }}'
   loop: '{{ eget_packages }}'
-- name: Create package installation directory
+
+- name: Create package installation directories
   ansible.builtin.file:
-    path: '{{ eget_install_dir }}'
+    path: '{{ eget_package_install_dirs[item] | default(eget_install_dir) }}'
     state: directory
     mode: '0755'
+  loop: '{{ eget_packages }}'
   when: eget_packages | length > 0
+
 - name: Install packages with eget
   ansible.builtin.command:
-    cmd: '{{ eget_package_commands[item] }} --to {{ (eget_install_dir ~ "/" ~ item) | quote }}'
-    creates: '{{ eget_install_dir }}/{{ item }}'
+    cmd: >-
+      {{ eget_package_commands[item] }}
+      --to {{ (eget_package_install_dirs[item] | default(eget_install_dir) ~ "/" ~ item) | quote }}
+    creates: '{{ eget_package_install_dirs[item] | default(eget_install_dir) }}/{{ item }}'
   loop: '{{ eget_packages }}'
+
 - name: Make installed packages executable
   ansible.builtin.file:
-    path: '{{ eget_install_dir }}/{{ item }}'
+    path: '{{ eget_package_install_dirs[item] | default(eget_install_dir) }}/{{ item }}'
     state: file
     mode: '0755'
   loop: '{{ eget_packages }}'
+
 - name: Verify installation
   ansible.builtin.include_tasks:
     apply:

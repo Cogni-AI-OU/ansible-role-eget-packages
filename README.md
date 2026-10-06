@@ -45,7 +45,8 @@ For available variables,
 check [`defaults/main.yml`](defaults/main.yml).
 
 - `eget_packages`: List of package names to install (default: `[]`).
-- `eget_install_dir`: Destination directory (default: `/usr/local/bin`).
+- `eget_install_dir`: Default destination directory (default: `~/.local/bin`).
+- `eget_package_install_dirs`: Per-package destination directory overrides (default: `{}`).
 
 For example:
 
@@ -53,13 +54,17 @@ For example:
 eget_packages:
   - bat
   - rg
+eget_package_install_dirs:
+  rg: ~/.local/sbin
 ```
 
 The command map in [`vars/main.yml`](vars/main.yml) defines how to install each supported package.
 Unknown package names are rejected before installation.
-The role appends `--to <eget_install_dir>/<package name>` to each predefined command.
+The role appends `--to <install dir>/<package name>` to each predefined command, where `<install dir>` is
+`eget_package_install_dirs[<package name>]` when set, otherwise `eget_install_dir`.
 Existing binaries are skipped; remove a binary to reinstall it or change its release.
-Use play-level `become: true` when the destination requires elevated privileges.
+The default `~/.local/bin` is user-writable and avoids clashing with apt-managed binaries in `/usr/bin`
+and `/usr/local/bin`; use play-level `become: true` only when installing to a system directory.
 The predefined commands target x86-64 Linux; select packages compatible with your target's runtime.
 
 ## Testing
