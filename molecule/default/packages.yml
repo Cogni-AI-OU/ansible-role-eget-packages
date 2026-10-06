@@ -15,6 +15,7 @@ eget_packages:
   - jq
   - micromamba
   - minizinc
+  - namecom
   - nono
   - opencode
   - pandoc

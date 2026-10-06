@@ -15,6 +15,7 @@ eget_package_commands:
   jq: eget -a linux64 jqlang/jq
   micromamba: eget -a linux-64 -a ^sha256 -a ^tar.bz2 --to micromamba mamba-org/micromamba-releases
   minizinc: eget -a bundle-linux-x86_64.tgz --tag 2.9.7 --file */bin/minizinc MiniZinc/MiniZincIDE
+  namecom: eget -a linux_amd64 -a tar.gz --file namecom --tag v0.5.1 patramsey/namecom-cli
   nono: eget -a x86_64-unknown-linux-gnu.tar.gz nolabs-ai/nono
   opencode: eget -a opencode-linux-x64.tar.gz anomalyco/opencode
   pandoc: eget -a linux-amd64.tar.gz jgm/pandoc
