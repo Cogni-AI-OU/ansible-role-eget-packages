@@ -8,4 +8,5 @@ eget_package_versions:
   claude: '2.1.266'
   minizinc: '2.9.7'
   namecom: '0.5.1'
+  upctl: '3.36.0'
 eget_packages: []

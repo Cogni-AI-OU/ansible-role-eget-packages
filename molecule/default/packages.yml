@@ -22,6 +22,7 @@ eget_packages:
   - rg
   - rga
   - tealdeer
+  - upctl
   - vale
   - vopono
   - yq

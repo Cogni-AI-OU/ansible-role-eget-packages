@@ -73,6 +73,7 @@
     "rg": "eget -a x86_64-unknown-linux-musl.tar.gz BurntSushi/ripgrep",
     "rga": "eget -a ripgrep_all -a x86_64-unknown-linux-musl -a tar.gz --file rga phiresky/ripgrep-all",
     "tealdeer": "eget -a tealdeer-linux-x86_64-musl -a ^sha256 dbrgn/tealdeer",
+    "upctl": "eget -a linux_x86_64 -a tar.gz -a ^spdx --file upctl --tag v3.36.0 UpCloudLtd/upcloud-cli",
     "vale": "eget -a Linux_64-bit.tar.gz errata-ai/vale",
     "vopono": "eget -a linux_x86-64_gcc -a ^gui --to vopono jamesmcm/vopono",
     "yq": "eget -a ^.tar.gz mikefarah/yq"
