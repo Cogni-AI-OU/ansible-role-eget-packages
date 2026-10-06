@@ -12,6 +12,7 @@ eget_packages:
   - glow
   - jq
   - micromamba
+  - minizinc
   - nono
   - opencode
   - pandoc

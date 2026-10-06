@@ -103,7 +103,7 @@ To test using Molecule, run:
 molecule test
 ```
 
-Both scenarios install the 21 packages in [`molecule/default/packages.yml`](molecule/default/packages.yml)
+Both scenarios install the 22 packages in [`molecule/default/packages.yml`](molecule/default/packages.yml)
 and verify that each binary exists, is executable, and can report its version.
 These fixtures require x86-64 Linux with glibc 2.39 or newer (Debian latest or Ubuntu 24.04/newer).
 They do not target i386 Alpine, Ubuntu 22.04, or NixOS.
