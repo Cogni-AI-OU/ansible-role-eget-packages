@@ -35,6 +35,9 @@ eget_package_commands:
   proton-drive: >-
     eget {{ 'https' ~ '://proton.me/download/drive/cli/'
     ~ (eget_package_versions['proton-drive'] | default('0.9.0')) ~ '/linux-x64/proton-drive' }}
+  pulumi: >-
+    eget -a linux-x64.tar.gz -a ^.sig --tag v{{ eget_package_versions.pulumi | default('3.267.0') }}
+    pulumi/pulumi
   rclone: >-
     eget -a linux-amd64.zip --tag v{{ eget_package_versions.rclone | default('1.75.1') }}
     rclone/rclone

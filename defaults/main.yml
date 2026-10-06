@@ -10,6 +10,7 @@ eget_package_versions:
   minizinc: '2.9.7'
   namecom: '0.5.1'
   proton-drive: '0.9.0'
+  pulumi: '3.267.0'
   rclone: '1.75.1'
   upctl: '3.36.0'
 eget_packages: []

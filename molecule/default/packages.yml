@@ -21,6 +21,7 @@ eget_packages:
   - opencode
   - pandoc
   - proton-drive
+  - pulumi
   - rclone
   - rg
   - rga
