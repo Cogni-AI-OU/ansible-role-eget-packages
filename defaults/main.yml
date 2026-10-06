@@ -13,4 +13,5 @@ eget_package_versions:
   pulumi: '3.267.0'
   rclone: '1.75.1'
   upctl: '3.36.0'
+  wireproxy: '1.1.3'
 eget_packages: []

@@ -29,4 +29,5 @@ eget_packages:
   - upctl
   - vale
   - vopono
+  - wireproxy
   - yq

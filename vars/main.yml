@@ -49,4 +49,7 @@ eget_package_commands:
     --tag v{{ eget_package_versions.upctl | default('3.36.0') }} UpCloudLtd/upcloud-cli
   vale: eget -a Linux_64-bit.tar.gz errata-ai/vale
   vopono: eget -a linux_x86-64_gcc -a ^gui --to vopono jamesmcm/vopono
+  wireproxy: >-
+    eget -a linux_amd64.tar.gz --tag v{{ eget_package_versions.wireproxy | default('1.1.3') }}
+    windtf/wireproxy
   yq: eget -a ^.tar.gz mikefarah/yq
