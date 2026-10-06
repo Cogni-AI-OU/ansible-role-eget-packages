@@ -14,7 +14,3 @@ https://github.com/org/repo
 # URLs that fail due to network blocks
 # If DNS/firewall is the issue, allowlist the host in .github/FIREWALL.md
 # Only ignore here when link checks still fail after that.
-
-# Claude binary download endpoint. The URL is templated in vars/main.yml and
-# wrapped across lines, so lychee extracts a truncated prefix that returns 404.
-https://downloads\.claude\.ai/claude-code-releases
