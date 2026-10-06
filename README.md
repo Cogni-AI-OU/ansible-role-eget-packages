@@ -97,18 +97,7 @@ Steps to test role on Docker containers.
 
 ### Molecule
 
-To test using Molecule, run:
-
-```shell
-molecule test
-```
-
-Both scenarios install the 22 packages in [`molecule/default/packages.yml`](molecule/default/packages.yml)
-and verify that each binary exists, is executable, and can report its version.
-These fixtures require x86-64 Linux with glibc 2.39 or newer (Debian latest or Ubuntu 24.04/newer).
-They do not target i386 Alpine, Ubuntu 22.04, or NixOS.
-The prepare step installs eget and target-side runtime dependencies.
-Tests require access to GitHub releases and `downloads.claude.ai`.
+See the [Molecule testing guide](molecule/README.md) for scenarios, requirements, and run commands.
 
 ## Development
 

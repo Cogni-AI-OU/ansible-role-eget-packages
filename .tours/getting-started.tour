@@ -22,7 +22,7 @@
     },
     {
       "title": "Role Variables",
-      "description": "## Default Variables\n\n`eget_packages` is a plain list of package names. It defaults to an empty list, so no packages are installed unless configured. The command map in `vars/main.yml` defines how to install each supported package.\n\n`eget_install_dir` defaults to `/usr/local/bin`. Override it for a user-writable destination.\n\nSee `molecule/default/packages.yml` for the 22-package x86-64 Linux test fixture.",
+      "description": "## Default Variables\n\n`eget_packages` is a plain list of package names. It defaults to an empty list, so no packages are installed unless configured. The command map in `vars/main.yml` defines how to install each supported package.\n\n`eget_install_dir` defaults to `/usr/local/bin`. Override it for a user-writable destination.\n\nSee `molecule/default/packages.yml` for the x86-64 Linux test fixture.",
       "file": "defaults/main.yml"
     },
     {
@@ -77,8 +77,8 @@
     },
     {
       "title": "Molecule Package Testing",
-      "description": "## Package Testing with Molecule\n\nBoth scenarios share `default/packages.yml`, listing all 22 requested packages by name. Their eget commands are defined in `vars/main.yml`. Tests target x86-64 Debian latest and Ubuntu 24.04/newer because the fixture requires glibc 2.39 or newer.\n\nPrepare installs eget and target runtime dependencies. Converge installs every package; idempotence checks that a second run makes no changes. Verify checks each binary's presence, executable permission, and version command.\n\nRun `pipenv run molecule test` for the default scenario or `pipenv run molecule test -s devel` for the development scenario. Downloads require access to GitHub releases and `downloads.claude.ai`.",
-      "directory": "molecule"
+      "description": "## Package Testing with Molecule\n\nSee `molecule/README.md` for scenario coverage, platform requirements, and run commands. Both scenarios share the package-name list in `default/packages.yml` and use the predefined eget commands in `vars/main.yml`.",
+      "file": "molecule/README.md"
     },
     {
       "title": "Requirements Management",
