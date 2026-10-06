@@ -48,8 +48,8 @@ check [`defaults/main.yml`](defaults/main.yml).
 - `eget_install_dir`: Default destination directory (default: `~/.local/bin`).
 - `eget_package_install_dirs`: Per-package destination directory overrides (default: `{}`).
 - `eget_package_versions`: Per-package version overrides for packages pinned by the role
-  (default: `astro: '1.46.0'`, `claude: '2.1.266'`, `minizinc: '2.9.7'`, `namecom: '0.5.1'`,
-  `proton-drive: '0.9.0'`, `rclone: '1.75.1'`, `upctl: '3.36.0'`).
+  (default: `astro: '1.46.0'`, `claude: '2.1.266'`, `himalaya: '2.2.1'`, `minizinc: '2.9.7'`,
+  `namecom: '0.5.1'`, `proton-drive: '0.9.0'`, `rclone: '1.75.1'`, `upctl: '3.36.0'`).
 
 For example:
 

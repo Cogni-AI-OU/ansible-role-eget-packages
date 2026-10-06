@@ -12,6 +12,7 @@ eget_packages:
   - eza
   - fd
   - glow
+  - himalaya
   - jq
   - micromamba
   - minizinc

@@ -6,6 +6,7 @@ eget_package_install_dirs: {}
 eget_package_versions:
   astro: '1.46.0'
   claude: '2.1.266'
+  himalaya: '2.2.1'
   minizinc: '2.9.7'
   namecom: '0.5.1'
   proton-drive: '0.9.0'
