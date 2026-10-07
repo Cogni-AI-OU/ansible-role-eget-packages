@@ -228,15 +228,6 @@ exist. Do not skip items just because a file already exists.
   - Purpose: GitHub Actions problem matcher for pre-commit output
   - Action: Copy from reference if missing
 
-- [ ] **`.github/GITHUB-WORKFLOWS.md`**
-  - Check if file exists
-  - Reference: `https://github.com/Cogni-AI-OU/.github/blob/main/.github/GITHUB-WORKFLOWS.md`
-  - Purpose: Documentation for GitHub workflows, agents, and problem matchers
-  - Action: Create if missing; if exists, **PRESERVE** existing repository-specific documentation
-    and **MERGE** missing organization-standard sections
-  - Content: Workflow templates overview, agent prompts usage, problem matchers configuration, security notes
-  - Customize: Update workflow references and add repository-specific workflow documentation
-
 - [ ] **`.github/workflows/README.md`**
   - Check if file exists
   - Reference: `https://github.com/Cogni-AI-OU/.github/blob/main/.github/workflows/README.md`
