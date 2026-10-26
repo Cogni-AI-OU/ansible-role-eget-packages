@@ -87,5 +87,7 @@
   // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode",
   // Note: Python dependencies can be added in the `requirements.txt` file.
-  "onCreateCommand": "sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive xargs -a .devcontainer/apt-packages.txt apt-get install -yqq -o Dpkg::Use-Pty=0"
+  // Pre-create ~/.local/bin: when its `target` path is missing, eget creates it as a FILE, so every
+  // tool overwrites the same file and pip then fails with ENOTDIR on ~/.local/bin/uv.
+  "onCreateCommand": "mkdir -p \"$HOME/.local/bin\" && sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive xargs -a .devcontainer/apt-packages.txt apt-get install -yqq -o Dpkg::Use-Pty=0"
 }
